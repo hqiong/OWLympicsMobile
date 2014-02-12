@@ -25,10 +25,12 @@ Titanium.UI.setBackgroundColor('#000');
 	//considering tablet to have one dimension over 900px - this is imperfect, so you should feel free to decide
 	//yourself what you consider a tablet form factor for android
 	var isTablet = osname === 'ipad' || (osname === 'android' && (width > 899 || height > 899));
+
 	/*windows */
 	var homeWin = Titanium.UI.createWindow({
 		title : 'OWLympics',
 		backgroundColor : '#000000',
+		orientationModes : [Titanium.UI.PORTRAIT],
 	});
 
 	homeWin.addEventListener('android:back', function() {
@@ -83,6 +85,24 @@ Titanium.UI.setBackgroundColor('#000');
 	homeWin.add(timeView);
 
 	/*buttons*/
+	var backbtn = Ti.UI.createButton({
+		top : '2%',
+		left : '4%',
+		width : 60,
+		height : 60,
+		backgroundImage : './images/backbuttonblue.png',
+		backgroundSelectedImage : './images/backbuttongray.png',
+	});
+	var nextbtn = Ti.UI.createButton({
+		bottom : '2%',
+		right : '4%',
+		width : 60,
+		height : 60,
+		backgroundImage : './images/nextbuttonblue.png',
+		backgroundSelectedImage : './images/nextbuttongray.png',
+
+	});
+
 	var newactivitybtn = Ti.UI.createButton({
 		title : 'NEW',
 		color : 'white',
@@ -98,8 +118,10 @@ Titanium.UI.setBackgroundColor('#000');
 		backgroundSelectedImage : './images/red600.png',
 	});
 	newactivitybtn.addEventListener('click', function(e) {
+		homeView.add(nextbtn);
 		whenView.show();
-
+		whenView.add(backbtn);
+		whichview = 1;
 		homeView.hide();
 	});
 
@@ -124,10 +146,11 @@ Titanium.UI.setBackgroundColor('#000');
 			activityEnterAnimation : Ti.Android.R.anim.none,
 			activityExitAnimation : Ti.Android.R.anim.none
 		});
+		whichview = 0;
 	});
 
 	homeView.add(viewactivitybtn);
-
+	var dateofactivity;
 	var todaybtn = Ti.UI.createButton({
 		title : 'Today',
 		color : 'white',
@@ -143,7 +166,12 @@ Titanium.UI.setBackgroundColor('#000');
 		backgroundSelectedImage : './images/red.jpg',
 	});
 	todaybtn.addEventListener('click', function(e) {
+		homeView.remove(nextbtn);
+		whenView.add(nextbtn);
 		whatView.show();
+		whenView.remove(backbtn);
+		whatView.add(backbtn);
+		whichview = 2;
 		whenView.hide();
 	});
 
@@ -164,7 +192,12 @@ Titanium.UI.setBackgroundColor('#000');
 		backgroundSelectedImage : './images/red.jpg',
 	});
 	yestbtn.addEventListener('click', function(e) {
+		homeView.remove(nextbtn);
+		whenView.add(nextbtn);
 		whatView.show();
+		whenView.remove(backbtn);
+		whatView.add(backbtn);
+		whichview = 2;
 		whenView.hide();
 	});
 
@@ -190,14 +223,24 @@ Titanium.UI.setBackgroundColor('#000');
 		top : '60%',
 		left : '30%',
 	});
+	var datepick;
+	pickdate.addEventListener('change', function(e) {
+		datepicked = e.row.custom_item;
+	});
 
 	choosebtn.addEventListener('click', function(e) {
+		homeView.remove(nextbtn);
+		whenView.add(nextbtn);
 		whatView.show();
+		whenView.remove(backbtn);
+		whatView.add(backbtn);
+		whichview = 2;
 		whenView.hide();
 	});
 
 	whenView.add(choosebtn);
 	whenView.add(pickdate);
+	var useractivity;
 
 	var activitybtn1 = Ti.UI.createButton({
 		title : 'RUN',
@@ -206,7 +249,7 @@ Titanium.UI.setBackgroundColor('#000');
 			fontSize : 30,
 			fontFamily : 'Helvetica Neue'
 		},
-		top : '30%',
+		top : '15%',
 		left : '15%',
 		width : 130,
 		height : 130,
@@ -215,12 +258,17 @@ Titanium.UI.setBackgroundColor('#000');
 	});
 
 	activitybtn1.addEventListener('click', function(e) {
+		useractivity = "Running";
+		whenView.remove(nextbtn);
+		whatView.add(nextbtn);
 		timeView.show();
+		whatView.remove(backbtn);
+		timeView.add(backbtn);
+		whichview = 3;
 		whatView.hide();
 	});
 
 	whatView.add(activitybtn1);
-
 	var activitybtn2 = Ti.UI.createButton({
 		title : 'WALK',
 		color : 'white',
@@ -228,7 +276,7 @@ Titanium.UI.setBackgroundColor('#000');
 			fontSize : 30,
 			fontFamily : 'Helvetica Neue'
 		},
-		top : '30%',
+		top : '15%',
 		left : '40%',
 		width : 130,
 		height : 130,
@@ -237,7 +285,13 @@ Titanium.UI.setBackgroundColor('#000');
 	});
 
 	activitybtn2.addEventListener('click', function(e) {
+		useractivity = "Walking";
+		whenView.remove(nextbtn);
+		whatView.add(nextbtn);
 		timeView.show();
+		whatView.remove(backbtn);
+		timeView.add(backbtn);
+		whichview = 3;
 		whatView.hide();
 	});
 
@@ -250,7 +304,7 @@ Titanium.UI.setBackgroundColor('#000');
 			fontSize : 30,
 			fontFamily : 'Helvetica Neue'
 		},
-		top : '30%',
+		top : '15%',
 		left : '70%',
 		width : 130,
 		height : 130,
@@ -259,7 +313,13 @@ Titanium.UI.setBackgroundColor('#000');
 	});
 
 	activitybtn3.addEventListener('click', function(e) {
+		useractivity = "Swimming";
+		whenView.remove(nextbtn);
+		whatView.add(nextbtn);
 		timeView.show();
+		whatView.remove(backbtn);
+		timeView.add(backbtn);
+		whichview = 3;
 		whatView.hide();
 	});
 
@@ -272,7 +332,7 @@ Titanium.UI.setBackgroundColor('#000');
 			fontSize : 30,
 			fontFamily : 'Helvetica Neue'
 		},
-		top : '50%',
+		top : '35%',
 		left : '25%',
 		width : 130,
 		height : 130,
@@ -281,7 +341,13 @@ Titanium.UI.setBackgroundColor('#000');
 	});
 
 	activitybtn4.addEventListener('click', function(e) {
+		useractivity = "Cycling";
+		whenView.remove(nextbtn);
+		whatView.add(nextbtn);
 		timeView.show();
+		whatView.remove(backbtn);
+		timeView.add(backbtn);
+		whichview = 3;
 		whatView.hide();
 	});
 
@@ -294,8 +360,8 @@ Titanium.UI.setBackgroundColor('#000');
 			fontSize : 30,
 			fontFamily : 'Helvetica Neue'
 		},
-		top : '50%',
-		left : '60%',
+		top : '35%',
+		left : '55%',
 		width : 130,
 		height : 130,
 		backgroundImage : './images/green600.png',
@@ -303,7 +369,13 @@ Titanium.UI.setBackgroundColor('#000');
 	});
 
 	activitybtn5.addEventListener('click', function(e) {
+		useractivity = "Weight";
+		whenView.remove(nextbtn);
+		whatView.add(nextbtn);
 		timeView.show();
+		whatView.remove(backbtn);
+		timeView.add(backbtn);
+		whichview = 3;
 		whatView.hide();
 	});
 
@@ -316,7 +388,7 @@ Titanium.UI.setBackgroundColor('#000');
 			fontSize : 30,
 			fontFamily : 'Helvetica Neue'
 		},
-		top : '70%',
+		top : '55%',
 		left : '60%',
 		width : 130,
 		height : 130,
@@ -324,38 +396,49 @@ Titanium.UI.setBackgroundColor('#000');
 		backgroundSelectedImage : './images/red600.png',
 	});
 
-	var otheractivity = Ti.UI.TextField({
+	var othertxt = Ti.UI.createTextField({
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 		color : 'black',
 		font : {
 			fontSize : 30,
 			fontFamily : 'Helvetica Neue'
 		},
-		top : '70%',
-		left : '25%',
+		top : '55%',
+		left : '15%',
 		width : 250,
 		height : 100,
 		backgroundColor : 'white',
 	});
 
-	whatView.add(otheractivity);
+	whatView.add(othertxt);
 
-	activitybtn5.addEventListener('click', function(e) {
+	activitybtn6.addEventListener('click', function(e) {
+		useractivity = othertxt.value;
+		othertxt.blur();
+		whenView.remove(nextbtn);
+		whatView.add(nextbtn);
 		timeView.show();
+		whatView.remove(backbtn);
+		timeView.add(backbtn);
+		whichview = 3;
 		whatView.hide();
 	});
 
-	whatView.add(activitybtn5);
-	
-		var lowbtn = Ti.UI.createButton({
+	othertxt.addEventListener('focus', function(e) {
+		Ti.UI.Android.hideSoftKeyboard();
+	});
+
+	whatView.add(activitybtn6);
+
+	var lowbtn = Ti.UI.createButton({
 		title : 'LOW',
 		color : 'white',
 		font : {
 			fontSize : 30,
 			fontFamily : 'Helvetica Neue'
 		},
-		top : '20%',
-		left : '20%',
+		top : '15%',
+		left : '15%',
 		width : 130,
 		height : 130,
 		backgroundImage : './images/green600.png',
@@ -367,16 +450,16 @@ Titanium.UI.setBackgroundColor('#000');
 	});
 
 	timeView.add(lowbtn);
-	
-			var medbtn = Ti.UI.createButton({
+
+	var medbtn = Ti.UI.createButton({
 		title : 'MED',
 		color : 'white',
 		font : {
 			fontSize : 30,
 			fontFamily : 'Helvetica Neue'
 		},
-		top : '20%',
-		left : '30%',
+		top : '15%',
+		left : '40%',
 		width : 130,
 		height : 130,
 		backgroundImage : './images/green600.png',
@@ -388,16 +471,16 @@ Titanium.UI.setBackgroundColor('#000');
 	});
 
 	timeView.add(medbtn);
-	
-			var highbtn = Ti.UI.createButton({
+
+	var highbtn = Ti.UI.createButton({
 		title : 'HIGH',
 		color : 'white',
 		font : {
 			fontSize : 30,
 			fontFamily : 'Helvetica Neue'
 		},
-		top : '20%',
-		left : '60%',
+		top : '15%',
+		left : '65%',
 		width : 130,
 		height : 130,
 		backgroundImage : './images/green600.png',
@@ -409,7 +492,127 @@ Titanium.UI.setBackgroundColor('#000');
 	});
 
 	timeView.add(highbtn);
-	
+
+	var mycol = new Array();
+	var i = 0;
+	for ( i = 0; i < 50; i++) {
+		var a = i * 5;
+		mycol[i] = Titanium.UI.createPickerRow({
+			title : a.toString()
+		});
+	}
+
+	var lowpick = Titanium.UI.createPicker({
+		top : '40%',
+		left : '20%',
+		height : 100,
+		width : 100,
+		selectionIndicator : true,
+		type : Titanium.UI.PICKER_TYPE_PLAIN,
+
+	});
+	var medpick = Titanium.UI.createPicker({
+		top : '40%',
+		left : '45%',
+		height : 100,
+		width : 100,
+		selectionIndicator : true,
+		type : Titanium.UI.PICKER_TYPE_PLAIN,
+
+	});
+	var highpick = Titanium.UI.createPicker({
+		top : '40%',
+		left : '70%',
+		height : 100,
+		width : 100,
+		selectionIndicator : true,
+		type : Titanium.UI.PICKER_TYPE_PLAIN,
+
+	});
+	lowpick.add(mycol);
+	medpick.add(mycol);
+	highpick.add(mycol);
+	var lowpicked, medpicked, highpicked;
+	lowpick.addEventListener('change', function(e) {
+		lowpicked = e.row.custom_item;
+	});
+
+	medpick.addEventListener('change', function(e) {
+		medpicked = e.row.custom_item;
+	});
+	highpick.addEventListener('change', function(e) {
+		highpicked = e.row.custom_item;
+	});
+
+	timeView.add(lowpick);
+	timeView.add(medpick);
+	timeView.add(highpick);
+
+	backbtn.addEventListener('click', function(e) {
+		switch(whichview) {
+			case 1:
+				homeView.show();
+				whenView.hide();
+				whichview = 0;
+				whenView.remove(nextbtn);
+				homeView.add(nextbtn);
+				break;
+			case 2:
+				whenView.show();
+				whatView.hide();
+				whichview = 1;
+				whatView.remove(nextbtn);
+				whenView.add(nextbtn);
+				whatView.remove(backbtn);
+				whenView.add(backbtn);
+				break;
+			case 3:
+				whatView.show();
+				timeView.hide();
+				whichview = 2;
+				timeView.remove(nextbtn);
+				whatView.add(nextbtn);
+				timeView.remove(backbtn);
+				whatView.add(backbtn);
+				break;
+
+			default:
+
+		}
+	});
+	nextbtn.addEventListener('click', function(e) {
+		switch(whichview) {
+			case 0:
+				homeView.hide();
+				whenView.show();
+				whichview = 1;
+				homeView.remove(nextbtn);
+				whenView.add(nextbtn);
+				break;
+			case 1:
+				whenView.hide();
+				whatView.show();
+				whichview = 2;
+				whenView.remove(nextbtn);
+				whatView.add(nextbtn);
+				whenView.remove(backbtn);
+				whatView.add(backbtn);
+				break;
+			case 2:
+				whatView.hide();
+				timeView.show();
+				whichview = 3;
+				whatView.remove(nextbtn);
+				timeView.add(nextbtn);
+				whatView.remove(backbtn);
+				timeView.add(backbtn);
+				break;
+
+			default:
+
+		}
+	});
+
 	//Get information for profile
 
 	var activity1 = Ti.UI.createLabel({
@@ -484,7 +687,7 @@ Titanium.UI.setBackgroundColor('#000');
 	};
 
 	function profileUpdate() {
-		profileReq.open("POST", "http://owlympics.ecg.rice.edu:81/mobile/profile");
+		profileReq.open("POST", "http://sh.rice.edu:5000/mobile/profile");
 		var params = {
 			uuid : Titanium.Platform.id,
 		};
@@ -713,9 +916,19 @@ Titanium.UI.setBackgroundColor('#000');
 	profileWin.add(refresh);
 
 	var submit = Ti.UI.createButton({
-		top : '300dp',
-		left : '70dp',
+		top : '80%',
+		left : '70%',
+		color : 'white',
+		font : {
+			fontSize : 30,
+			fontFamily : 'Helvetica Neue'
+		},
+		width : 130,
+		height : 130,
 		title : 'Submit',
+		backgroundImage : './images/blue600.png',
+		backgroundSelectedImage : './images/orange600.png',
+
 	});
 
 	var submitReq = Titanium.Network.createHTTPClient();
@@ -727,25 +940,29 @@ Titanium.UI.setBackgroundColor('#000');
 			alert(this.responseText);
 		}
 	};
-
+	var social = 1;
+	var t = new Date();
 	submit.addEventListener('click', function(e) {
-		if (exercise.value != '' && time.value != '' && time.value > 0) {
-			alert();
-			submitReq.open("POST", "http://owlympics.ecg.rice.edu/mobile/submit");
+			alert(user.value);
+			submitReq.open("POST", "http://sh.rice.edu:5000/mobile/submit");
 			var params = {
-				exercise : exercise.value,
-				lowintensity : lowIntensityTime.value,
-				mediumintensity : mediumIntensityTime.value,
-				highintensity : highIntensityTime.value,
-				partners : numberOfFriends.value,
-				rating : numberRating.value,
-				date : _date.value,
+				date : datepicked,
+				activity : "running",
+				social : social.value,
+				lowintensity : 10,
+				moderateintensity : 10,
+				highintensity : 10,
+				note : "",
+				rate : social.value,
+				hour : t.getHours(),
+				min : t.getMinutes(),
+				sec : t.getSeconds(),
+				happiness : social.value,
+				activeness : social.value,
 				uuid : Titanium.Platform.id
 			};
 			submitReq.send(params);
-		} else {
-			alert("Please fill all fields. Time cannot be zero.");
-		}
+
 	});
 
 	var image = Ti.UI.createImageView({
@@ -778,7 +995,7 @@ Titanium.UI.setBackgroundColor('#000');
 	};
 
 	deauth.addEventListener('click', function(e) {
-		deauthReq.open("POST", "http://owlympics.ecg.rice.edu/mobile/detach");
+		deauthReq.open("POST", "http://sh.rice.edu:5000/mobile/detach");
 		var params = {
 			uuid : Titanium.Platform.id
 		};
@@ -911,7 +1128,7 @@ Titanium.UI.setBackgroundColor('#000');
 	win1.add(medlabel);
 	win1.add(highIntensityTime);
 	win1.add(highlabel);
-	win1.add(submit);
+	timeView.add(submit);
 
 	var register = Ti.UI.createButton({
 		top : '300dp',
@@ -928,6 +1145,7 @@ Titanium.UI.setBackgroundColor('#000');
 			alert("Account successfully registered.");
 			homeWin.open();
 			win2.close();
+			Ti.UI.Android.hideSoftKeyboard();
 			Ti.App.Properties.setInt('loggedBefore', 1);
 
 		} else {
@@ -937,7 +1155,7 @@ Titanium.UI.setBackgroundColor('#000');
 
 	register.addEventListener('click', function(e) {
 		if (email.value != '' && password.value != '') {
-			registerReq.open("POST", "http://owlympics.ecg.rice.edu:81/mobile/register");
+			registerReq.open("POST", "http://sh.rice.edu:5000/mobile/register");
 			var params = {
 				username : email.value,
 				password : password.value,
@@ -951,9 +1169,9 @@ Titanium.UI.setBackgroundColor('#000');
 
 	if (Ti.App.Properties.hasProperty('loggedBefore')) {
 		homeWin.open();
+		Ti.UI.Android.hideSoftKeyboard();
 	} else {
 		win2.open();
 	}
 
 })();
-
