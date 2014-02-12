@@ -17,7 +17,7 @@
 	"description": "Version 1.2 for OWLympics Mobile application.",
 	"copyright": "2014 by Rajoshi Biswas",
 	"guid": "502db958-dc63-4c33-87c2-88a82032acde",
-	"icon": "appicon.png",
+	"icon": "myimage.png",
 	"fullscreen": true,
 	"navbar-hidden": true,
 	"skipJSMinification": true,
